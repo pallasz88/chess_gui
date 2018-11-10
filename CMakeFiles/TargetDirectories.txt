@@ -1,3 +1,0 @@
-C:/Users/palla/Documents/Qt/chess_gui/CMakeFiles/chess.dir
-C:/Users/palla/Documents/Qt/chess_gui/CMakeFiles/ALL_BUILD.dir
-C:/Users/palla/Documents/Qt/chess_gui/CMakeFiles/ZERO_CHECK.dir

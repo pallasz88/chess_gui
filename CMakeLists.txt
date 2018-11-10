@@ -13,36 +13,26 @@ set(CMAKE_AUTOMOC ON)
 # Create code from a list of Qt resource files
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5 REQUIRED Widgets Multimedia)
+find_package(Qt5 REQUIRED Widgets)
 
 # Populate a CMake variable with the sources
 set(chess_SRCS
-    main.cpp
-    frame.cpp
-    mainwindow.cpp
-    piece.cpp
-	pawn.cpp
-	knight.cpp
-	bishop.cpp
-	rook.cpp
-	queen.cpp
-	king.cpp
-	square.cpp
+    src/main.cpp
+    src/frame.cpp
+    src/mainwindow.cpp
+    src/piece.cpp
+	src/square.cpp
     res.qrc
 )
 
 set(chess_HDRS
-    frame.h
-    mainwindow.h
-	pawn.h
-	knight.h
-	bishop.h
-	rook.h
-	queen.h
-	king.h
-    piece.h
-	square.h
+    include/frame.h
+    include/mainwindow.h
+    include/piece.h
+	include/square.h
 )
+
+include_directories(include)
 
 set(chess_LIBS
     Qt5::Widgets)
