@@ -19,7 +19,11 @@ public:
         BPawn = 1, BKnight, BBishop, BRook, BQueen, BKing
 	};
 
-    explicit Piece(Pieces pieceType, QObject *parent = Q_NULLPTR);
+    explicit Piece(Pieces pieceType, QPointF offset,QObject *parent = Q_NULLPTR);
+
+	bool IsOffBoard(QGraphicsSceneMouseEvent * event);
+
+	void ResetPosition();
 
 private:
 
@@ -31,10 +35,10 @@ private:
 
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
-	void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 	QImage pieceImage;
+
+	QPointF startPosition;
 
 };

@@ -45,11 +45,10 @@ Frame::Frame(QWidget *parent) :
 
 	for (const auto& it : board)
 	{
-		QPoint offset((i % 8) * 100, (i / 8) * 100);
+		QPointF offset((i % 8) * 100, (i / 8) * 100);
 		if (it < 7 && it != 0)
 		{
-			auto *piece = new Piece((Piece::Pieces) it, this);
-			piece->setPos(offset);
+			auto *piece = new Piece((Piece::Pieces) it, offset, this);
 			scene->addItem(piece);
 		}
 
