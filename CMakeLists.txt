@@ -17,25 +17,25 @@ find_package(Qt5 REQUIRED Widgets)
 
 # Populate a CMake variable with the sources
 set(chess_SRCS
-    src/main.cpp
-    src/frame.cpp
-    src/mainwindow.cpp
-    src/piece.cpp
-	src/square.cpp
-    res.qrc
-)
+        src/main.cpp
+        src/frame.cpp
+        src/mainwindow.cpp
+        src/piece.cpp
+        src/square.cpp
+        res.qrc
+        )
 
 set(chess_HDRS
-    include/frame.h
-    include/mainwindow.h
-    include/piece.h
-	include/square.h
-)
+        include/frame.h
+        include/mainwindow.h
+        include/piece.h
+        include/square.h
+        )
 
 include_directories(include)
 
 set(chess_LIBS
-    Qt5::Widgets)
+        Qt5::Widgets)
 
 add_executable(chess WIN32 ${chess_SRCS} ${chess_HDRS})
 

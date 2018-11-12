@@ -8,18 +8,18 @@
 class Square : public QObject, public QGraphicsItem
 {
 
-	Q_OBJECT
-	Q_INTERFACES(QGraphicsItem)
+    Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
 
 public:
 
-	explicit Square(QBrush brush, QGraphicsItem *parent = Q_NULLPTR);
+    explicit Square(QBrush brush, QGraphicsItem *parent = Q_NULLPTR);
 
-	QRectF boundingRect() const override;
+    QRectF boundingRect() const override;
 
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 private:
 
-	QBrush brush;
+    QBrush brush;
 };

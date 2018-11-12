@@ -12,12 +12,17 @@ class Frame : public QGraphicsView
 
 public:
 
-    explicit Frame(QWidget *parent =  Q_NULLPTR);
+    explicit Frame(QWidget *parent = Q_NULLPTR);
 
 private:
 
     QGraphicsScene *scene;
 
+    void CreateSquares();
+
+    void CreatePieces();
+
+    void CreateScene();
 };
 
 #endif // FRAME_H

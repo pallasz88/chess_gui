@@ -1,30 +1,30 @@
 #include "piece.h"
 
 Piece::Piece(Pieces pieceType, QPointF offset, QObject *parent) :
-	QObject(parent),
-	startPosition(offset)
+    QObject(parent),
+    startPosition(offset)
 {
-	SetPieceImage(pieceType);
-	setFlag(QGraphicsItem::ItemIsMovable);
-	setPos(startPosition);
+    SetPieceImage(pieceType);
+    setFlag(QGraphicsItem::ItemIsMovable);
+    setPos(startPosition);
 }
 
-bool Piece::IsOffBoard(QGraphicsSceneMouseEvent *event)
+bool Piece::IsOffBoard(QGraphicsSceneMouseEvent *event) const
 {
-	return (mapToParent(event->pos()).x() > 799 || 
-			mapToParent(event->pos()).y() > 799 ||
-			mapToParent(event->pos()).x() < 0 ||
-			mapToParent(event->pos()).y() < 0);
+    return (mapToParent(event->pos()).x() > 799 || 
+            mapToParent(event->pos()).y() > 799 ||
+            mapToParent(event->pos()).x() < 0 ||
+            mapToParent(event->pos()).y() < 0);
 }
 
 void Piece::ResetPosition()
 {
-	setPos(startPosition);
+    setPos(startPosition);
 }
 
 void Piece::SetPieceImage(Pieces pieceType)
 {
-	pieceImage = (pieceType == Pieces::King)    ? QImage(":/images/king.png") :
+    pieceImage = (pieceType == Pieces::King)    ? QImage(":/images/king.png") :
                  (pieceType == Pieces::Queen)   ? QImage(":/images/queen.png"):
                  (pieceType == Pieces::Rook)    ? QImage(":/images/rook.png"):
                  (pieceType == Pieces::Bishop)  ? QImage(":/images/bishop.png"):
@@ -40,42 +40,65 @@ void Piece::SetPieceImage(Pieces pieceType)
 
 void Piece::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	painter->drawImage(boundingRect(), pieceImage);
+    painter->drawImage(boundingRect(), pieceImage);
 }
 
 QRectF Piece::boundingRect() const
 {
-	return QRectF(0, 0, 100, 100);
+    return QRectF(0, 0, 100, 100);
 }
 
 void Piece::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	QGraphicsItem::mousePressEvent(event);
-	setCursor(Qt::ClosedHandCursor);
-	startPosition = QPointF((int)(mapToParent(event->pos()).x() / 100) * 100, (int)(mapToParent(event->pos()).y() / 100) * 100);
-	setPos(mapToParent(event->pos()).x() - 50, mapToParent(event->pos()).y() - 50);
+    QGraphicsItem::mousePressEvent(event);
+    setCursor(Qt::ClosedHandCursor);
+    SaveStartPosition(event);
+    GrabPieceCentroid(event);
+}
+
+void Piece::GrabPieceCentroid(const QGraphicsSceneMouseEvent *event) {
+    setPos(mapToParent(event->pos()).x() - 50,
+           mapToParent(event->pos()).y() - 50);
+}
+
+void Piece::SaveStartPosition(const QGraphicsSceneMouseEvent *event) {
+    startPosition = QPointF((int)(mapToParent(event->pos()).x() / 100) * 100,
+                            (int)(mapToParent(event->pos()).y() / 100) * 100);
 }
 
 void Piece::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    setCursor(Qt::ArrowCursor);
     QGraphicsItem::mouseReleaseEvent(event);
+    setCursor(Qt::ArrowCursor);
 
-	if (IsOffBoard(event))
-	{
-		ResetPosition();
-		return;
-	}
+    if (IsOffBoard(event))
+    {
+        ResetPosition();
+        return;
+    }
 
+    PutPieceOnSquare(event);
+    DeleteCapturedPieces();
+}
+
+void Piece::PutPieceOnSquare(const QGraphicsSceneMouseEvent *event)
+{
     setPos((int) (mapToParent(event->pos()).x() / 100) * 100,
            (int) (mapToParent(event->pos()).y() / 100) * 100);
+}
 
-	QList<QGraphicsItem *> list = collidingItems();
-	for (const auto& it : list)
-	{
-		if (it != this && it->flags() == ItemIsMovable)
-		{
-			delete it;
-		}
-	}
+void Piece::DeleteCapturedPieces() const {
+    QList<QGraphicsItem *> collidingItemList = collidingItems();
+    for (const auto& it : collidingItemList)
+    {
+        if (it != this && IsPieceOnBoard(it))
+        {
+            delete it;
+        }
+    }
+}
+
+bool Piece::IsPieceOnBoard(QGraphicsItem *const &item) const
+{
+    return item->flags() == ItemIsMovable;
 }

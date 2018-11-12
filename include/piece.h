@@ -8,37 +8,46 @@
 class Piece : public QObject, public QGraphicsItem
 {
 
-	Q_OBJECT
-	Q_INTERFACES(QGraphicsItem)
+    Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
 
 public:
 
-	enum class Pieces : int
-	{
-		King = -6, Queen, Rook, Bishop, Knight, Pawn,
+    enum class Pieces : int
+    {
+        King = -6, Queen, Rook, Bishop, Knight, Pawn,
         BPawn = 1, BKnight, BBishop, BRook, BQueen, BKing
-	};
+    };
 
-    explicit Piece(Pieces pieceType, QPointF offset,QObject *parent = Q_NULLPTR);
-
-	bool IsOffBoard(QGraphicsSceneMouseEvent * event);
-
-	void ResetPosition();
+    explicit Piece(Pieces pieceType, QPointF offset, QObject *parent = Q_NULLPTR);
 
 private:
 
-	void SetPieceImage(Pieces);
+    QImage pieceImage;
 
-	QRectF boundingRect() const override;
+    QPointF startPosition;
 
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    bool IsOffBoard(QGraphicsSceneMouseEvent *event) const;
 
-	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void SetPieceImage(Pieces);
 
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void ResetPosition();
 
-	QImage pieceImage;
+    void DeleteCapturedPieces() const;
 
-	QPointF startPosition;
+    QRectF boundingRect() const override;
 
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+
+    bool IsPieceOnBoard(QGraphicsItem *const &item) const;
+
+    void PutPieceOnSquare(const QGraphicsSceneMouseEvent *event);
+
+    void SaveStartPosition(const QGraphicsSceneMouseEvent *event);
+
+    void GrabPieceCentroid(const QGraphicsSceneMouseEvent *event);
 };

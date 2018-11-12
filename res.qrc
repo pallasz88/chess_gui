@@ -1,16 +1,17 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <file>images/knight.png</file>
-    <file>images/bishop.png</file>
-    <file>images/pawn.png</file>
-    <file>images/rook.png</file>
-    <file>images/queen.png</file>
-    <file>images/king.png</file>
-    <file>images/bknight.png</file>
-    <file>images/bbishop.png</file>
-    <file>images/bpawn.png</file>
-    <file>images/brook.png</file>
-    <file>images/bqueen.png</file>
-    <file>images/bking.png</file>
-</qresource>
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>images/knight.png</file>
+        <file>images/bishop.png</file>
+        <file>images/pawn.png</file>
+        <file>images/rook.png</file>
+        <file>images/queen.png</file>
+        <file>images/king.png</file>
+        <file>images/bknight.png</file>
+        <file>images/bbishop.png</file>
+        <file>images/bpawn.png</file>
+        <file>images/brook.png</file>
+        <file>images/bqueen.png</file>
+        <file>images/bking.png</file>
+    </qresource>
 </RCC>
