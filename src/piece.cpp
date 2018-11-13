@@ -1,4 +1,8 @@
+#include <iostream>
 #include "piece.h"
+#include "move.h"
+#include "history.h"
+#include "frame.h"
 
 Piece::Piece(Pieces pieceType, QPointF offset, QObject *parent) :
     QObject(parent),
@@ -77,11 +81,19 @@ void Piece::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    PutPieceOnSquare(event);
+    Move move(startPosition, mapToParent(event->pos()));
+    if(!move.IsValid())
+        return;
+
+    History::GetInstance().AddMoveToHistory(move);
+    History::GetInstance().PrintMoveHistory();
+    MovePieceToSquare(event);
     DeleteCapturedPieces();
+    UpdateBoard(move);
+    History::GetInstance().SaveBoard(board);
 }
 
-void Piece::PutPieceOnSquare(const QGraphicsSceneMouseEvent *event)
+void Piece::MovePieceToSquare(const QGraphicsSceneMouseEvent *event)
 {
     setPos((int) (mapToParent(event->pos()).x() / 100) * 100,
            (int) (mapToParent(event->pos()).y() / 100) * 100);
@@ -102,3 +114,11 @@ bool Piece::IsPieceOnBoard(QGraphicsItem *const &item) const
 {
     return item->flags() == ItemIsMovable;
 }
+
+void Piece::UpdateBoard(Move &move)
+{
+    int piece = board[move.GetFromCoordinates().y * 8 + move.GetFromCoordinates().x];
+    board[move.GetToCoordinates().y * 8 + move.GetToCoordinates().x] = piece;
+    board[move.GetFromCoordinates().y * 8 + move.GetFromCoordinates().x] = 0;
+}
+

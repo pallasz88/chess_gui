@@ -19,24 +19,26 @@ find_package(Qt5 REQUIRED Widgets)
 set(chess_SRCS
         src/main.cpp
         src/frame.cpp
+        src/history.cpp
         src/mainwindow.cpp
+        src/move.cpp
         src/piece.cpp
         src/square.cpp
-        res.qrc
-        )
+        res.qrc)
 
 set(chess_HDRS
         include/frame.h
+        include/history.h
         include/mainwindow.h
+        include/move.h
         include/piece.h
-        include/square.h
-        )
+        include/square.h)
 
 include_directories(include)
 
 set(chess_LIBS
         Qt5::Widgets)
 
-add_executable(chess WIN32 ${chess_SRCS} ${chess_HDRS})
+add_executable(chess ${chess_SRCS} ${chess_HDRS})
 
 target_link_libraries(chess ${chess_LIBS})

@@ -1,10 +1,12 @@
+#include "history.h"
+#include "frame.h"
 #include "square.h"
 
 Square::Square(QBrush brush, QGraphicsItem *parent) :
     QGraphicsItem(parent),
     brush(brush)
 {
-
+    setFlag(QGraphicsItem::ItemIsFocusable);
 }
 
 QRectF Square::boundingRect() const
@@ -16,4 +18,15 @@ void Square::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget 
 {
     painter->setBrush(brush);
     painter->drawRect(boundingRect());
+}
+
+void Square::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Backspace &&
+       !History::GetInstance().IsEmpty())
+    {
+        Move lastMove = History::GetInstance().DeleteLastMove();
+        std::cout << "Deleted move:" << lastMove << std::endl;
+        std::vector<int> previousBoard = History::GetInstance().DeleteLastPosition();
+    }
 }

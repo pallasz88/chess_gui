@@ -1,17 +1,7 @@
+#include <include/history.h>
+#include "piece.h"
 #include "frame.h"
 #include "square.h"
-
-const std::vector<int> board =
-{
-     4, 2, 3, 5, 6, 3, 2, 4,
-     1, 1, 1, 1, 1, 1, 1, 1,
-     0, 0, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, 0, 0, 0, 0,
-    -1,-1,-1,-1,-1,-1,-1,-1,
-    -4,-2,-3,-5,-6,-3,-2,-4 
-};
 
 Frame::Frame(QWidget *parent) :
     QGraphicsView(parent)
@@ -59,3 +49,4 @@ void Frame::CreateSquares() {
         scene->addItem(squares[i]);
     }
 }
+

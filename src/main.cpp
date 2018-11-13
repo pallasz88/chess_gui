@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "piece.h"
 #include "frame.h"
 
 #include <QApplication>

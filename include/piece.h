@@ -1,9 +1,13 @@
 #pragma once
 
+
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QCursor>
+
+
+class Move;
 
 class Piece : public QObject, public QGraphicsItem
 {
@@ -45,9 +49,12 @@ private:
 
     bool IsPieceOnBoard(QGraphicsItem *const &item) const;
 
-    void PutPieceOnSquare(const QGraphicsSceneMouseEvent *event);
+    void MovePieceToSquare(const QGraphicsSceneMouseEvent *event);
 
     void SaveStartPosition(const QGraphicsSceneMouseEvent *event);
 
     void GrabPieceCentroid(const QGraphicsSceneMouseEvent *event);
+
+    void UpdateBoard(Move&);
+
 };
