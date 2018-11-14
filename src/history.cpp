@@ -1,3 +1,6 @@
+#include "frame.h"
+#include "move.h"
+#include "piece.h"
 #include <iostream>
 #include "history.h"
 
@@ -27,19 +30,36 @@ const Move& History::DeleteLastMove()
     return lastMove;
 }
 
+void History::DeleteLastPosition()
+{
+    boardHistory.pop_back();
+}
+
 bool History::IsEmpty()
 {
     return history.empty() || boardHistory.empty();
 }
 
-void History::SaveBoard(const std::vector<int> &board)
+void History::SaveBoard()
 {
     boardHistory.push_back(board);
 }
 
-const std::vector<int> &History::DeleteLastPosition()
+void History::UpdateBoard(Move &move)
 {
-    const std::vector& board = boardHistory.back();
-    boardHistory.pop_back();
-    return board;
+    int piece = board[move.GetFromCoordinates().y * 8 + move.GetFromCoordinates().x];
+    board[move.GetToCoordinates().y * 8 + move.GetToCoordinates().x] = piece;
+    board[move.GetFromCoordinates().y * 8 + move.GetFromCoordinates().x] = 0;
+
+    SaveBoard();
+}
+
+std::vector<int> &History::GetBoard()
+{
+    return boardHistory.back();
+}
+
+History::History()
+{
+    SaveBoard();
 }

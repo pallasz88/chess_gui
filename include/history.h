@@ -3,32 +3,59 @@
 
 #include "move.h"
 #include <vector>
+#include <QObject>
+#include <QGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 
-class History
+class History : public QObject
 {
+
+    Q_OBJECT
 
 public:
 
     static History& GetInstance();
 
+    std::vector<int>& GetBoard();
+
     bool IsEmpty();
 
     void AddMoveToHistory(Move move);
 
-    const Move& DeleteLastMove();
-
     void PrintMoveHistory();
 
-    void SaveBoard(const std::vector<int> &board);
+    void SaveBoard();
 
-    const std::vector<int>& DeleteLastPosition();
+    void UpdateBoard(Move&);
+
+public slots:
+
+    const Move& DeleteLastMove();
+
+    void DeleteLastPosition();
+
+signals:
+
+    void BoardChanged(std::vector<int> board);
 
 private:
 
-    History() = default;
+    History();
 
     std::vector<Move> history;
 
     std::vector<std::vector<int>> boardHistory;
+
+    std::vector<int> board =
+    {
+        4, 2, 3, 5, 6, 3, 2, 4,
+        1, 1, 1, 1, 1, 1, 1, 1,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        -1,-1,-1,-1,-1,-1,-1,-1,
+        -4,-2,-3,-5,-6,-3,-2,-4
+    };
 
 };

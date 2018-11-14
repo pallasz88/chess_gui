@@ -55,6 +55,4 @@ private:
 
     void GrabPieceCentroid(const QGraphicsSceneMouseEvent *event);
 
-    void UpdateBoard(Move&);
-
 };

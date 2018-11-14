@@ -89,8 +89,7 @@ void Piece::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     History::GetInstance().PrintMoveHistory();
     MovePieceToSquare(event);
     DeleteCapturedPieces();
-    UpdateBoard(move);
-    History::GetInstance().SaveBoard(board);
+    History::GetInstance().UpdateBoard(move);
 }
 
 void Piece::MovePieceToSquare(const QGraphicsSceneMouseEvent *event)
@@ -113,12 +112,5 @@ void Piece::DeleteCapturedPieces() const {
 bool Piece::IsPieceOnBoard(QGraphicsItem *const &item) const
 {
     return item->flags() == ItemIsMovable;
-}
-
-void Piece::UpdateBoard(Move &move)
-{
-    int piece = board[move.GetFromCoordinates().y * 8 + move.GetFromCoordinates().x];
-    board[move.GetToCoordinates().y * 8 + move.GetToCoordinates().x] = piece;
-    board[move.GetFromCoordinates().y * 8 + move.GetFromCoordinates().x] = 0;
 }
 

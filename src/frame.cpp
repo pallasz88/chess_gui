@@ -24,13 +24,13 @@ void Frame::CreateScene() {
 void Frame::CreatePieces()
 {
     int i = 0;
-    for (const auto &it : board)
+    for (const auto &it : History::GetInstance().GetBoard())
     {
         QPointF offset((i % 8) * 100, (i / 8) * 100);
         if (it < 7 && it != 0)
         {
-            auto *piece = new Piece((Piece::Pieces) it, offset, this);
-            scene->addItem(piece);
+            pieces.emplace_back(new Piece((Piece::Pieces) it, offset, this));
+            scene->addItem(pieces.back());
         }
 
         ++i;
@@ -47,6 +47,19 @@ void Frame::CreateSquares() {
 
         squares[i]->setPos((i % 8) * 100, (i / 8) * 100);
         scene->addItem(squares[i]);
+        connect(squares[i], SIGNAL(TakeBackOrdered()), &History::GetInstance(), SLOT(DeleteLastMove()));
+        connect(squares[i], SIGNAL(TakeBackOrdered()), &History::GetInstance(), SLOT(DeleteLastPosition()));
+        connect(squares[i], SIGNAL(TakeBackOrdered()), this, SLOT(UpdateBoard()));
     }
 }
 
+void Frame::UpdateBoard()
+{
+    for(const auto& piece: pieces)
+    {
+        scene->removeItem(piece);
+        delete piece;
+    }
+
+    CreatePieces();
+}

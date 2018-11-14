@@ -25,8 +25,6 @@ void Square::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_Backspace &&
        !History::GetInstance().IsEmpty())
     {
-        Move lastMove = History::GetInstance().DeleteLastMove();
-        std::cout << "Deleted move:" << lastMove << std::endl;
-        std::vector<int> previousBoard = History::GetInstance().DeleteLastPosition();
+        emit TakeBackOrdered();
     }
 }
