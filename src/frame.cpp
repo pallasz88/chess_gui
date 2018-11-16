@@ -29,7 +29,7 @@ void Frame::CreatePieces()
         QPointF offset((i % 8) * 100, (i / 8) * 100);
         if (it < 7 && it != 0)
         {
-            pieces.emplace_back(new Piece((Piece::Pieces) it, offset, this));
+            pieces.emplace_back(new Piece((Piece::PieceTypes) it, offset, this));
             scene->addItem(pieces.back());
         }
 
@@ -55,11 +55,9 @@ void Frame::CreateSquares() {
 
 void Frame::UpdateBoard()
 {
-    for(const auto& piece: pieces)
-    {
+    for(auto& piece: pieces)
         scene->removeItem(piece);
-        delete piece;
-    }
 
+    pieces.clear();
     CreatePieces();
 }

@@ -33,6 +33,7 @@ const Move& History::DeleteLastMove()
 void History::DeleteLastPosition()
 {
     boardHistory.pop_back();
+    board = boardHistory.back();
 }
 
 bool History::IsEmpty()

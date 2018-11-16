@@ -17,13 +17,13 @@ class Piece : public QObject, public QGraphicsItem
 
 public:
 
-    enum class Pieces : int
+    enum class PieceTypes : int
     {
         King = -6, Queen, Rook, Bishop, Knight, Pawn,
         BPawn = 1, BKnight, BBishop, BRook, BQueen, BKing
     };
 
-    explicit Piece(Pieces pieceType, QPointF offset, QObject *parent = Q_NULLPTR);
+    explicit Piece(PieceTypes pieceType, QPointF offset, QObject *parent = Q_NULLPTR);
 
 private:
 
@@ -33,7 +33,7 @@ private:
 
     bool IsOffBoard(QGraphicsSceneMouseEvent *event) const;
 
-    void SetPieceImage(Pieces);
+    void SetPieceImage(PieceTypes);
 
     void ResetPosition();
 

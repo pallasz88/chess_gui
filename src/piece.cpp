@@ -4,7 +4,7 @@
 #include "history.h"
 #include "frame.h"
 
-Piece::Piece(Pieces pieceType, QPointF offset, QObject *parent) :
+Piece::Piece(PieceTypes pieceType, QPointF offset, QObject *parent) :
     QObject(parent),
     startPosition(offset)
 {
@@ -26,20 +26,20 @@ void Piece::ResetPosition()
     setPos(startPosition);
 }
 
-void Piece::SetPieceImage(Pieces pieceType)
+void Piece::SetPieceImage(PieceTypes pieceType)
 {
-    pieceImage = (pieceType == Pieces::King)    ? QImage(":/images/king.png") :
-                 (pieceType == Pieces::Queen)   ? QImage(":/images/queen.png"):
-                 (pieceType == Pieces::Rook)    ? QImage(":/images/rook.png"):
-                 (pieceType == Pieces::Bishop)  ? QImage(":/images/bishop.png"):
-                 (pieceType == Pieces::Knight)  ? QImage(":/images/knight.png"):
-                 (pieceType == Pieces::Pawn)    ? QImage(":/images/pawn.png"):
-                 (pieceType == Pieces::BKing)   ? QImage(":/images/bking.png") :
-                 (pieceType == Pieces::BQueen)  ? QImage(":/images/bqueen.png"):
-                 (pieceType == Pieces::BRook)   ? QImage(":/images/brook.png"):
-                 (pieceType == Pieces::BBishop) ? QImage(":/images/bbishop.png"):
-                 (pieceType == Pieces::BKnight) ? QImage(":/images/bknight.png"):
-                 (pieceType == Pieces::BPawn)   ? QImage(":/images/bpawn.png"): QImage("");
+    pieceImage = (pieceType == PieceTypes::King)    ? QImage(":/images/king.png") :
+                 (pieceType == PieceTypes::Queen)   ? QImage(":/images/queen.png"):
+                 (pieceType == PieceTypes::Rook)    ? QImage(":/images/rook.png"):
+                 (pieceType == PieceTypes::Bishop)  ? QImage(":/images/bishop.png"):
+                 (pieceType == PieceTypes::Knight)  ? QImage(":/images/knight.png"):
+                 (pieceType == PieceTypes::Pawn)    ? QImage(":/images/pawn.png"):
+                 (pieceType == PieceTypes::BKing)   ? QImage(":/images/bking.png") :
+                 (pieceType == PieceTypes::BQueen)  ? QImage(":/images/bqueen.png"):
+                 (pieceType == PieceTypes::BRook)   ? QImage(":/images/brook.png"):
+                 (pieceType == PieceTypes::BBishop) ? QImage(":/images/bbishop.png"):
+                 (pieceType == PieceTypes::BKnight) ? QImage(":/images/bknight.png"):
+                 (pieceType == PieceTypes::BPawn)   ? QImage(":/images/bpawn.png"): QImage("");
 }
 
 void Piece::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -85,10 +85,9 @@ void Piece::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(!move.IsValid())
         return;
 
-    History::GetInstance().AddMoveToHistory(move);
-    History::GetInstance().PrintMoveHistory();
     MovePieceToSquare(event);
     DeleteCapturedPieces();
+    History::GetInstance().AddMoveToHistory(move);
     History::GetInstance().UpdateBoard(move);
 }
 
@@ -98,15 +97,12 @@ void Piece::MovePieceToSquare(const QGraphicsSceneMouseEvent *event)
            (int) (mapToParent(event->pos()).y() / 100) * 100);
 }
 
-void Piece::DeleteCapturedPieces() const {
+void Piece::DeleteCapturedPieces() const
+{
     QList<QGraphicsItem *> collidingItemList = collidingItems();
     for (const auto& it : collidingItemList)
-    {
         if (it != this && IsPieceOnBoard(it))
-        {
-            delete it;
-        }
-    }
+            scene()->removeItem(it);
 }
 
 bool Piece::IsPieceOnBoard(QGraphicsItem *const &item) const
