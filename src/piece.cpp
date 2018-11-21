@@ -1,4 +1,3 @@
-#include <iostream>
 #include "piece.h"
 #include "move.h"
 #include "history.h"
@@ -11,6 +10,7 @@ Piece::Piece(PieceTypes pieceType, QPointF offset, QObject *parent) :
     SetPieceImage(pieceType);
     setFlag(QGraphicsItem::ItemIsMovable);
     setPos(startPosition);
+	parentFrame = (Frame*)parent;
 }
 
 bool Piece::IsOffBoard(QGraphicsSceneMouseEvent *event) const
@@ -88,7 +88,7 @@ void Piece::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     MovePieceToSquare(event);
     DeleteCapturedPieces();
     History::GetInstance().AddMoveToHistory(move);
-    History::GetInstance().UpdateBoard(move);
+    History::GetInstance().SaveBoard(parentFrame->GetPieces());
 }
 
 void Piece::MovePieceToSquare(const QGraphicsSceneMouseEvent *event)
@@ -99,7 +99,7 @@ void Piece::MovePieceToSquare(const QGraphicsSceneMouseEvent *event)
 
 void Piece::DeleteCapturedPieces() const
 {
-    QList<QGraphicsItem *> collidingItemList = collidingItems();
+    QList<QGraphicsItem*> collidingItemList = collidingItems();
     for (const auto& it : collidingItemList)
         if (it != this && IsPieceOnBoard(it))
             scene()->removeItem(it);

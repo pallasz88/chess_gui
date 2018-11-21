@@ -6,8 +6,8 @@
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
-#include "piece.h"
 
+class Piece;
 
 class Frame : public QGraphicsView
 {
@@ -18,6 +18,8 @@ public:
 
     explicit Frame(QWidget *parent = Q_NULLPTR);
 
+	const QList<Piece*>& GetPieces() const;
+
 public slots:
 
     void UpdateBoard();
@@ -26,12 +28,24 @@ private:
 
     QGraphicsScene *scene;
 
-    std::vector<Piece*> pieces;
+    QList<Piece*> pieces;
 
     void CreateSquares();
 
     void CreatePieces();
 
     void CreateScene();
+
+	QList<int> board =
+	{
+		4, 2, 3, 5, 6, 3, 2, 4,
+		1, 1, 1, 1, 1, 1, 1, 1,
+		0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0,
+		-1,-1,-1,-1,-1,-1,-1,-1,
+		-4,-2,-3,-5,-6,-3,-2,-4
+	};
 
 };

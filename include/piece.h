@@ -9,6 +9,8 @@
 
 class Move;
 
+class Frame;
+
 class Piece : public QObject, public QGraphicsItem
 {
 
@@ -25,15 +27,17 @@ public:
 
     explicit Piece(PieceTypes pieceType, QPointF offset, QObject *parent = Q_NULLPTR);
 
+    void SetPieceImage(PieceTypes);
+
 private:
+
+	Frame *parentFrame;
 
     QImage pieceImage;
 
     QPointF startPosition;
 
     bool IsOffBoard(QGraphicsSceneMouseEvent *event) const;
-
-    void SetPieceImage(PieceTypes);
 
     void ResetPosition();
 

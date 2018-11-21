@@ -1,8 +1,9 @@
+#include "history.h"
+#include "piece.h"
 #include "frame.h"
 #include "move.h"
-#include "piece.h"
 #include <iostream>
-#include "history.h"
+#include <qdebug.h>
 
 History &History::GetInstance()
 {
@@ -10,7 +11,7 @@ History &History::GetInstance()
     return instance;
 }
 
-void History::AddMoveToHistory(Move move)
+void History::AddMoveToHistory(Move& move)
 {
     history.push_back(move);
 }
@@ -18,9 +19,7 @@ void History::AddMoveToHistory(Move move)
 void History::PrintMoveHistory()
 {
     for(const auto& move : history)
-    {
         std::cout << move << std::endl;
-    }
 }
 
 const Move& History::DeleteLastMove()
@@ -33,7 +32,9 @@ const Move& History::DeleteLastMove()
 void History::DeleteLastPosition()
 {
     boardHistory.pop_back();
-    board = boardHistory.back();
+    currentPosition = boardHistory.back();
+	for(const auto& it : currentPosition)
+		qDebug() << it->pos();
 }
 
 bool History::IsEmpty()
@@ -41,26 +42,22 @@ bool History::IsEmpty()
     return history.empty() || boardHistory.empty();
 }
 
-void History::SaveBoard()
+void History::SaveBoard(const QList<Piece*>& pieces)
 {
-    boardHistory.push_back(board);
+    boardHistory.push_back(pieces);
+	currentPosition = pieces;
+	for (const auto& it : currentPosition)
+		qDebug() << "Save board: " << it->pos();
 }
 
-void History::UpdateBoard(Move &move)
+const QList<Piece*>& History::GetBoard()
 {
-    int piece = board[move.GetFromCoordinates().y * 8 + move.GetFromCoordinates().x];
-    board[move.GetToCoordinates().y * 8 + move.GetToCoordinates().x] = piece;
-    board[move.GetFromCoordinates().y * 8 + move.GetFromCoordinates().x] = 0;
-
-    SaveBoard();
-}
-
-std::vector<int> &History::GetBoard()
-{
-    return boardHistory.back();
+	for (const auto& it : currentPosition)
+		qDebug() << "Get board:" << it->pos();
+    return currentPosition;
 }
 
 History::History()
 {
-    SaveBoard();
+    //SaveBoard();
 }

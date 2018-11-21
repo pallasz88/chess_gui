@@ -24,7 +24,6 @@ void Square::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_Backspace &&
        !History::GetInstance().IsEmpty())
-    {
         emit TakeBackOrdered();
-    }
+	update();
 }

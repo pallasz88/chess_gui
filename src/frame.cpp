@@ -1,7 +1,8 @@
-#include <include/history.h>
+#include "history.h"
 #include "piece.h"
 #include "frame.h"
 #include "square.h"
+#include <QDebug>
 
 Frame::Frame(QWidget *parent) :
     QGraphicsView(parent)
@@ -24,26 +25,35 @@ void Frame::CreateScene() {
 void Frame::CreatePieces()
 {
     int i = 0;
-    for (const auto &it : History::GetInstance().GetBoard())
+    for (const auto &it : board)
     {
         QPointF offset((i % 8) * 100, (i / 8) * 100);
         if (it < 7 && it != 0)
         {
-            pieces.emplace_back(new Piece((Piece::PieceTypes) it, offset, this));
+            pieces.push_back(new Piece((Piece::PieceTypes) it, offset, this));
             scene->addItem(pieces.back());
         }
 
         ++i;
     }
+	
+	History::GetInstance().SaveBoard(pieces);
 }
 
-void Frame::CreateSquares() {
-    std::vector<Square *> squares;
-    for (int i = 0; i < 64; i++) {
+const QList<Piece*>& Frame::GetPieces() const
+{
+	return pieces;
+}
+
+void Frame::CreateSquares()
+{
+    QList<Square *> squares;
+    for (int i = 0; i < 64; i++)
+	{
         ((i % 2 == 0 && (i / 8) % 2) == 1 ||
          (i % 2 == 1 && (i / 8) % 2 == 0)) ?
-        squares.emplace_back(new Square(QColor(0, 99, 177, 255))) :
-        squares.emplace_back(new Square(Qt::white));
+        squares.push_back(new Square(QColor(0, 99, 177, 255))) :
+        squares.push_back(new Square(Qt::white));
 
         squares[i]->setPos((i % 8) * 100, (i / 8) * 100);
         scene->addItem(squares[i]);
@@ -55,9 +65,12 @@ void Frame::CreateSquares() {
 
 void Frame::UpdateBoard()
 {
-    for(auto& piece: pieces)
-        scene->removeItem(piece);
+	pieces = History::GetInstance().GetBoard();
 
-    pieces.clear();
-    CreatePieces();
+	for (const auto& it : pieces)
+		qDebug() << "update: " << it->pos();
+
+	for (auto& piece : pieces)
+		piece->SetPieceImage(Piece::PieceTypes::BQueen);
+	update(0, 0, 1200, 1200);
 }
