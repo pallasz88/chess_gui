@@ -3,6 +3,7 @@
 #include "piece.h"
 #include "square.h"
 #include "position.h"
+#include <QDebug>
 
 Frame::Frame(QWidget *parent) :
     QGraphicsView(parent)
@@ -29,8 +30,8 @@ void Frame::keyPressEvent(QKeyEvent *event)
 void Frame::CreateScene() {
     scene = new QGraphicsScene(this);
     setScene(scene);
-    setSceneRect(-30, -20, 1200, 900);
-    setBackgroundBrush(QBrush(QColor(1, 133, 116, 255)));
+    setSceneRect(-130, -20, 1200, 900);
+    setBackgroundBrush(QBrush(QColor(51, 62, 68, 255)));
 }
 
 void Frame::CreatePieces()
@@ -41,14 +42,16 @@ void Frame::CreatePieces()
         QPointF offset((i % 8) * 100, (i / 8) * 100);
         if (it < 7 && it != 0)
         {
-            pieces.push_back(new Piece((Piece::PieceTypes) it, offset, this));
-            scene->addItem(pieces.back());
+			auto *piece = new Piece((Piece::PieceTypes) it, offset, this);
+            pieces.push_back(piece);
+            scene->addItem(piece);
         }
 
         ++i;
     }
 	
 	History::GetInstance().SaveBoard(pieces);
+	History::GetInstance().PrintMoveHistory();
 }
 
 const QList<Piece*>& Frame::GetPieces() const
@@ -63,8 +66,8 @@ void Frame::CreateSquares()
 	{
         ((i % 2 == 0 && (i / 8) % 2) == 1 ||
          (i % 2 == 1 && (i / 8) % 2 == 0)) ?
-        squares.push_back(new Square(QColor(0, 99, 177, 255))) :
-        squares.push_back(new Square(Qt::white));
+        squares.push_back(new Square(QColor(140, 162, 173, 255))) :
+        squares.push_back(new Square(QColor(222, 227, 230, 255)));
 
         squares[i]->setPos((i % 8) * 100, (i / 8) * 100);
         scene->addItem(squares[i]);
@@ -73,14 +76,15 @@ void Frame::CreateSquares()
 
 void Frame::UpdateBoard()
 {
-	pieces = History::GetInstance().GetPieces();
 	PiecePosition position = History::GetInstance().GetLastPosition();
 
-	for (auto& piece : pieces)
-	    for (auto& pos : position.GetCurrentPosition()) {
-            piece->setPos(pos);
-            break;
-        }
+	foreach (const auto& pos, position.GetCurrentPosition()) 
+		foreach(auto& piece, pieces)
+		{
+			qDebug() << "Take: " << pos;
+			piece->setPos(pos);
+			break;
+		}
 
 	scene->update(sceneRect());
 }

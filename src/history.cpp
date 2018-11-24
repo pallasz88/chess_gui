@@ -17,12 +17,8 @@ void History::AddMoveToHistory(Move& move)
 
 void History::PrintMoveHistory()
 {
-    for(const auto& move : moveList)
+    foreach(const auto& move, moveList)
         std::cout << move << std::endl;
-
-    for(auto& it : positionHistory)
-        for(auto& itt : it.GetCurrentPosition())
-            qDebug() << itt;
 }
 
 const Move& History::DeleteLastMove()
@@ -35,17 +31,11 @@ const Move& History::DeleteLastMove()
 void History::DeleteLastPosition()
 {
     positionHistory.erase(positionHistory.end());
-    pieceHistory.pop_back();
 }
 
 bool History::IsEmpty()
 {
     return moveList.empty() || positionHistory.empty();
-}
-
-const QList<Piece *> & History::GetPieces() const
-{
-    return pieceHistory.back();
 }
 
 PiecePosition History::GetLastPosition() const
@@ -57,5 +47,4 @@ void History::SaveBoard(const QList<Piece*>& pieces)
 {
     PiecePosition position(pieces);
     positionHistory.insert(pieces, position);
-    pieceHistory.push_back(pieces);
 }

@@ -16,8 +16,6 @@ public:
 
     static History& GetInstance();
 
-	const QList<Piece*>& GetPieces() const;
-
 	PiecePosition GetLastPosition() const;
 
     bool IsEmpty();
@@ -34,10 +32,10 @@ public:
 
 private:
 
+	History() = default;
+
     QList<Move> moveList;
 
     QMap<QList<Piece*>, PiecePosition> positionHistory;
-
-    QList<QList<Piece*>> pieceHistory;
 
 };
