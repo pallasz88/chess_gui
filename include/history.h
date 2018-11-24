@@ -1,23 +1,24 @@
 #pragma once
 
 
-#include <QGraphicsItem>
-#include <QGraphicsSceneMouseEvent>
+#include <QList>
 
 class Piece;
 
 class Move;
 
-class History : public QObject
-{
+class PiecePosition;
 
-    Q_OBJECT
+class History
+{
 
 public:
 
     static History& GetInstance();
 
-	const QList<Piece*>& GetBoard();
+	const QList<Piece*>& GetPieces() const;
+
+	PiecePosition GetLastPosition() const;
 
     bool IsEmpty();
 
@@ -25,22 +26,18 @@ public:
 
     void PrintMoveHistory();
 
-    void SaveBoard(const QList<Piece*>&);
-
-public slots:
-
     const Move& DeleteLastMove();
 
     void DeleteLastPosition();
 
+    void SaveBoard(const QList<Piece*>&);
+
 private:
 
-    History();
+    QList<Move> moveList;
 
-    QList<Move> history;
+    QMap<QList<Piece*>, PiecePosition> positionHistory;
 
-    QList<Piece*> currentPosition;
-
-	QList<QList<Piece*>> boardHistory;
+    QList<QList<Piece*>> pieceHistory;
 
 };

@@ -41,7 +41,7 @@ private:
 
     void ResetPosition();
 
-    void DeleteCapturedPieces() const;
+    void DeleteCapturedPiece() const;
 
     QRectF boundingRect() const override;
 

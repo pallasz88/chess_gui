@@ -86,9 +86,10 @@ void Piece::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         return;
 
     MovePieceToSquare(event);
-    DeleteCapturedPieces();
+    DeleteCapturedPiece();
     History::GetInstance().AddMoveToHistory(move);
     History::GetInstance().SaveBoard(parentFrame->GetPieces());
+    History::GetInstance().PrintMoveHistory();
 }
 
 void Piece::MovePieceToSquare(const QGraphicsSceneMouseEvent *event)
@@ -97,7 +98,7 @@ void Piece::MovePieceToSquare(const QGraphicsSceneMouseEvent *event)
            (int) (mapToParent(event->pos()).y() / 100) * 100);
 }
 
-void Piece::DeleteCapturedPieces() const
+void Piece::DeleteCapturedPiece() const
 {
     QList<QGraphicsItem*> collidingItemList = collidingItems();
     for (const auto& it : collidingItemList)

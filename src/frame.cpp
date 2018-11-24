@@ -1,8 +1,8 @@
+#include "frame.h"
 #include "history.h"
 #include "piece.h"
-#include "frame.h"
 #include "square.h"
-#include <QDebug>
+#include "position.h"
 
 Frame::Frame(QWidget *parent) :
     QGraphicsView(parent)
@@ -15,10 +15,21 @@ Frame::Frame(QWidget *parent) :
     CreatePieces();
 }
 
+void Frame::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Backspace &&
+       !History::GetInstance().IsEmpty())
+    {
+        History::GetInstance().DeleteLastMove();
+        History::GetInstance().DeleteLastPosition();
+        UpdateBoard();
+    }
+}
+
 void Frame::CreateScene() {
     scene = new QGraphicsScene(this);
     setScene(scene);
-    setSceneRect(0, 0, 1200, 900);
+    setSceneRect(-30, -20, 1200, 900);
     setBackgroundBrush(QBrush(QColor(1, 133, 116, 255)));
 }
 
@@ -57,20 +68,19 @@ void Frame::CreateSquares()
 
         squares[i]->setPos((i % 8) * 100, (i / 8) * 100);
         scene->addItem(squares[i]);
-        connect(squares[i], SIGNAL(TakeBackOrdered()), &History::GetInstance(), SLOT(DeleteLastMove()));
-        connect(squares[i], SIGNAL(TakeBackOrdered()), &History::GetInstance(), SLOT(DeleteLastPosition()));
-        connect(squares[i], SIGNAL(TakeBackOrdered()), this, SLOT(UpdateBoard()));
     }
 }
 
 void Frame::UpdateBoard()
 {
-	pieces = History::GetInstance().GetBoard();
-
-	for (const auto& it : pieces)
-		qDebug() << "update: " << it->pos();
+	pieces = History::GetInstance().GetPieces();
+	PiecePosition position = History::GetInstance().GetLastPosition();
 
 	for (auto& piece : pieces)
-		piece->SetPieceImage(Piece::PieceTypes::BQueen);
-	update(0, 0, 1200, 1200);
+	    for (auto& pos : position.GetCurrentPosition()) {
+            piece->setPos(pos);
+            break;
+        }
+
+	scene->update(sceneRect());
 }

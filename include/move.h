@@ -4,18 +4,6 @@
 #include <iostream>
 #include <QPointF>
 
-struct Coordinates
-{
-    int x;
-    int y;
-
-    explicit Coordinates(int x, int y)
-    {
-        this->x = x;
-        this->y = 8 - y;
-    }
-};
-
 class Move
 {
 
@@ -24,10 +12,6 @@ public:
     explicit Move(QPointF startPosition, QPointF endPosition);
 
     bool IsValid() {return true;}
-
-    Coordinates GetFromCoordinates();
-
-    Coordinates GetToCoordinates();
 
 private:
 

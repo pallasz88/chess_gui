@@ -20,21 +20,21 @@ public:
 
 	const QList<Piece*>& GetPieces() const;
 
-public slots:
-
-    void UpdateBoard();
-
 private:
-
-    QGraphicsScene *scene;
-
-    QList<Piece*> pieces;
 
     void CreateSquares();
 
     void CreatePieces();
 
     void CreateScene();
+
+    void keyPressEvent(QKeyEvent* event) override;
+
+    void UpdateBoard();
+
+    QGraphicsScene *scene;
+
+    QList<Piece*> pieces;
 
 	QList<int> board =
 	{

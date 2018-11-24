@@ -23,6 +23,7 @@ set(chess_SRCS
         src/mainwindow.cpp
         src/move.cpp
         src/piece.cpp
+        src/position.cpp
         src/square.cpp
         res.qrc)
 
@@ -32,6 +33,7 @@ set(chess_HDRS
         include/mainwindow.h
         include/move.h
         include/piece.h
+        include/position.h
         include/square.h)
 
 include_directories(include)

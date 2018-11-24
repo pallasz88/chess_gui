@@ -1,6 +1,3 @@
-#include <string>
-#include <iostream>
-#include <QPointF>
 #include "move.h"
 
 Move::Move(QPointF startPosition, QPointF endPosition)
@@ -15,14 +12,4 @@ std::ostream& operator<<(std::ostream& os, const Move& move)
 {
     os << move.move;
     return os;
-}
-
-Coordinates Move::GetFromCoordinates()
-{
-    return Coordinates(move[0]-'a', move[1]-'0');
-}
-
-Coordinates Move::GetToCoordinates()
-{
-    return Coordinates(move[2]-'a', move[3]-'0');
 }
