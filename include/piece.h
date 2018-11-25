@@ -27,7 +27,9 @@ public:
 
     explicit Piece(PieceTypes pieceType, QPointF offset, QObject *parent = Q_NULLPTR);
 
-    void SetPieceImage(PieceTypes);
+    void SetPieceImage(PieceTypes pieceType);
+
+	PieceTypes GetPieceType() const;
 
 private:
 
@@ -36,6 +38,8 @@ private:
     QImage pieceImage;
 
     QPointF startPosition;
+
+	PieceTypes pieceType;
 
     bool IsOffBoard(QGraphicsSceneMouseEvent *event) const;
 

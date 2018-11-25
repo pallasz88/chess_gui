@@ -22,7 +22,6 @@ void Frame::keyPressEvent(QKeyEvent *event)
        !History::GetInstance().IsEmpty())
     {
         History::GetInstance().DeleteLastMove();
-        History::GetInstance().DeleteLastPosition();
         UpdateBoard();
     }
 }
@@ -74,17 +73,10 @@ void Frame::CreateSquares()
     }
 }
 
+
+
 void Frame::UpdateBoard()
 {
-	PiecePosition position = History::GetInstance().GetLastPosition();
-
-	foreach (const auto& pos, position.GetCurrentPosition()) 
-		foreach(auto& piece, pieces)
-		{
-			qDebug() << "Take: " << pos;
-			piece->setPos(pos);
-			break;
-		}
-
+	History::GetInstance().RestoreBoard(scene);
 	scene->update(sceneRect());
 }

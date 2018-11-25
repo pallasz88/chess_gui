@@ -10,6 +10,16 @@ History &History::GetInstance()
     return instance;
 }
 
+void History::RestoreBoard(QGraphicsScene *scene)
+{
+	QSettings settings("Moose Soft", "Facturo-Pro");
+	foreach(QVariant data, settings.value("items").toList())
+	{
+		QGraphicsItem* item = ConvertToItem(data);
+		scene->addItem(item);
+	}
+}
+
 void History::AddMoveToHistory(Move& move)
 {
     moveList.push_back(move);
@@ -28,23 +38,36 @@ const Move& History::DeleteLastMove()
     return lastMove;
 }
 
-void History::DeleteLastPosition()
-{
-    positionHistory.erase(positionHistory.end());
-}
-
 bool History::IsEmpty()
 {
-    return moveList.empty() || positionHistory.empty();
+    return moveList.empty();
 }
 
-PiecePosition History::GetLastPosition() const
+QVariant History::ConvertToVariant(Piece* item)
 {
-    return positionHistory.first();
+	QVariantHash data;
+	data["pos"] = item->pos();
+	data["visibility"] = item->isVisible();
+	data["type"] = (int)item->GetPieceType();
+	return data;
+}
+
+Piece* History::ConvertToItem(QVariant variant)
+{
+	QVariantHash data = variant.toHash();
+	Piece* result = new Piece((Piece::PieceTypes)data["type"].toInt(), data["pos"].toPointF());
+	result->setPos(data["pos"].toPointF());
+	result->setVisible(data["visible"].toBool());
+	return result;
 }
 
 void History::SaveBoard(const QList<Piece*>& pieces)
 {
-    PiecePosition position(pieces);
-    positionHistory.insert(pieces, position);
+	QVariantList pieceList;
+	QSettings settings("Moose Soft", "Facturo-Pro");
+	foreach (Piece* piece, pieces)
+		pieceList << ConvertToVariant(piece);
+	
+	settings.setValue("items", pieceList);
+	qDebug() << settings.value("items").toList().at(0);
 }

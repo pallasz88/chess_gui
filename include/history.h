@@ -1,13 +1,19 @@
 #pragma once
 
 
-#include <QList>
+#include <QStack>
+#include <QVariant>
+#include <QGraphicsItem>
+#include <QSettings>
+#include <QGraphicsScene>
 
 class Piece;
 
 class Move;
 
 class PiecePosition;
+
+Q_DECLARE_METATYPE(QList<Piece*>)
 
 class History
 {
@@ -16,7 +22,7 @@ public:
 
     static History& GetInstance();
 
-	PiecePosition GetLastPosition() const;
+	void RestoreBoard(QGraphicsScene *scene);
 
     bool IsEmpty();
 
@@ -26,16 +32,20 @@ public:
 
     const Move& DeleteLastMove();
 
-    void DeleteLastPosition();
-
     void SaveBoard(const QList<Piece*>&);
 
 private:
 
 	History() = default;
 
-    QList<Move> moveList;
+	History(const History&) = delete;
 
-    QMap<QList<Piece*>, PiecePosition> positionHistory;
+	History& operator=(const History&) = delete;
+
+	QVariant ConvertToVariant(Piece* item);
+
+	Piece* ConvertToItem(QVariant variant);
+
+    QList<Move> moveList;
 
 };

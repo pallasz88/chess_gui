@@ -7,6 +7,7 @@ Piece::Piece(PieceTypes pieceType, QPointF offset, QObject *parent) :
     QObject(parent),
     startPosition(offset)
 {
+	this->pieceType = pieceType;
     SetPieceImage(pieceType);
     setFlag(QGraphicsItem::ItemIsMovable);
     setPos(startPosition);
@@ -40,6 +41,11 @@ void Piece::SetPieceImage(PieceTypes pieceType)
                  (pieceType == PieceTypes::BBishop) ? QImage(":/images/bbishop.png"):
                  (pieceType == PieceTypes::BKnight) ? QImage(":/images/bknight.png"):
                  (pieceType == PieceTypes::BPawn)   ? QImage(":/images/bpawn.png"): QImage("");
+}
+
+Piece::PieceTypes Piece::GetPieceType() const
+{
+	return pieceType;
 }
 
 void Piece::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -102,8 +108,11 @@ void Piece::DeleteCapturedPiece() const
 {
     QList<QGraphicsItem*> collidingItemList = collidingItems();
     for (const auto& it : collidingItemList)
-        if (it != this && IsPieceOnBoard(it))
-            scene()->removeItem(it);
+		if (it != this && IsPieceOnBoard(it))
+		{
+			it->hide();
+			scene()->removeItem(it);
+		}
 }
 
 bool Piece::IsPieceOnBoard(QGraphicsItem *const &item) const
