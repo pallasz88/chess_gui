@@ -2,14 +2,17 @@
 #include "move.h"
 #include "history.h"
 #include "frame.h"
+#include <limits>
 
 Piece::Piece(PieceTypes pieceType, QPointF offset, QObject *parent) :
     QObject(parent),
     startPosition(offset)
 {
 	this->pieceType = pieceType;
+	this->zPosition = zValue();
     SetPieceImage(pieceType);
     setFlag(QGraphicsItem::ItemIsMovable);
+    setAcceptHoverEvents(true);
     setPos(startPosition);
 	parentFrame = (Frame*)parent;
 }
@@ -64,6 +67,7 @@ void Piece::mousePressEvent(QGraphicsSceneMouseEvent *event)
     setCursor(Qt::ClosedHandCursor);
     SaveStartPosition(event);
     GrabPieceCentroid(event);
+    setZValue(std::numeric_limits<int>::max());
 }
 
 void Piece::GrabPieceCentroid(const QGraphicsSceneMouseEvent *event) {
@@ -79,7 +83,8 @@ void Piece::SaveStartPosition(const QGraphicsSceneMouseEvent *event) {
 void Piece::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
-    setCursor(Qt::ArrowCursor);
+    setCursor(Qt::OpenHandCursor);
+    setZValue(zPosition);
 
     if (IsOffBoard(event))
     {
@@ -120,3 +125,14 @@ bool Piece::IsPieceOnBoard(QGraphicsItem *const &item) const
     return item->flags() == ItemIsMovable;
 }
 
+void Piece::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    QGraphicsItem::hoverEnterEvent(event);
+    setCursor(Qt::OpenHandCursor);
+}
+
+void Piece::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    QGraphicsItem::hoverLeaveEvent(event);
+    setCursor(Qt::ArrowCursor);
+}

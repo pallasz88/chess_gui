@@ -41,6 +41,8 @@ private:
 
 	PieceTypes pieceType;
 
+	qreal zPosition;
+
     bool IsOffBoard(QGraphicsSceneMouseEvent *event) const;
 
     void ResetPosition();
@@ -62,5 +64,9 @@ private:
     void SaveStartPosition(const QGraphicsSceneMouseEvent *event);
 
     void GrabPieceCentroid(const QGraphicsSceneMouseEvent *event);
+
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
 
 };
