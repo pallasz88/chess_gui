@@ -4,6 +4,8 @@ project(chess_gui)
 
 set(CMAKE_CXX_STANDARD 17)
 
+add_subdirectory(movegenerator)
+
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed
@@ -34,12 +36,16 @@ set(chess_HDRS
         include/move.h
         include/piece.h
         include/position.h
-        include/square.h)
+        include/square.h
+        movegenerator/include/adapter/adapter.h)
 
-include_directories(include)
+include_directories(
+        include
+        movegenerator/include/adapter)
 
 set(chess_LIBS
-        Qt5::Widgets)
+        Qt5::Widgets
+        generator)
 
 add_executable(chess ${chess_SRCS} ${chess_HDRS})
 

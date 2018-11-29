@@ -19,10 +19,16 @@ class Piece : public QObject, public QGraphicsItem
 
 public:
 
-    enum class PieceTypes : int
+    /*enum class PieceTypes : int
     {
         King = -6, Queen, Rook, Bishop, Knight, Pawn,
         BPawn = 1, BKnight, BBishop, BRook, BQueen, BKing
+    };*/
+
+    enum class PieceTypes : char
+    {
+        King = 'K', Queen = 'Q', Rook = 'R', Bishop = 'B', Knight = 'N', Pawn = 'P',
+        BPawn = 'p', BKnight = 'n', BBishop = 'b', BRook = 'r', BQueen = 'q', BKing = 'k'
     };
 
     explicit Piece(PieceTypes pieceType, QPointF offset, QObject *parent = Q_NULLPTR);

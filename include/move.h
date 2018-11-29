@@ -12,7 +12,7 @@ public:
 
     explicit Move(QPointF startPosition, QPointF endPosition);
 
-    bool IsValid() {return true;}
+    bool IsValid();
 
 private:
 

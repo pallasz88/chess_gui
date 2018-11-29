@@ -3,6 +3,7 @@
 #include "piece.h"
 #include "square.h"
 #include "position.h"
+#include "adapter.h"
 #include <QDebug>
 
 Frame::Frame(QWidget *parent) :
@@ -10,6 +11,8 @@ Frame::Frame(QWidget *parent) :
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    fenPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     CreateScene();
     CreateSquares();
@@ -36,19 +39,45 @@ void Frame::CreateScene() {
 void Frame::CreatePieces()
 {
     int i = 0;
-    for (const auto &it : board)
+    for(auto & it : fenPosition)
     {
         QPointF offset((i % 8) * 100, (i / 8) * 100);
-        if (it < 7 && it != 0)
+        switch ( it )
         {
-			auto *piece = new Piece((Piece::PieceTypes) it, offset, this);
-            pieces.push_back(piece);
-            scene->addItem(piece);
+            case 'P':
+            case 'p':
+            case 'N':
+            case 'n':
+            case 'B':
+            case 'b':
+            case 'R':
+            case 'r':
+            case 'K':
+            case 'k':
+            case 'Q':
+            case 'q':
+                pieces.push_back(new Piece((Piece::PieceTypes) it, offset, this));
+                scene->addItem(pieces.back());
+                i++;
+                break;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+                i += it - '0';
+                break;
+            case '/':
+            default:
+                break;
         }
-
-        ++i;
+        if (it == ' ') break;
     }
-	
+
+    Chess::ParseFen(fenPosition);
 	History::GetInstance().SaveBoard(pieces);
 	History::GetInstance().PrintMoveHistory();
 }
